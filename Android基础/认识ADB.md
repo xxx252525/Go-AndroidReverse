@@ -24,7 +24,7 @@ adb的构成如下：
 
 原理图如下：
 
-![adb工作原理.drawio](./%E8%AE%A4%E8%AF%86ADB.assets/adb%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86.drawio-1728216660047-2.png)
+![adb工作原理.drawio](./%E8%AE%A4%E8%AF%86ADB.assets/adb%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86.drawio-1728220514903-3.png)
 
 
 
@@ -123,7 +123,99 @@ sudo pacman -S android-tools
 
 
 
+# 手机连接PC调试
 
+## 打开开发者模式
+
+我这里以原生Google的Android系统做演示，国内其他手机类似。
+
+> Android原生
+
+打开手机设置--->关于手机--->版本号点击7次即可：
+
+<img src="./%E8%AE%A4%E8%AF%86ADB.assets/image-20241006205704413.png" alt="image-20241006205704413" style="zoom: 80%;" />
+
+> 小米手机：MIUI or HyperOS
+
+打开手机设置--->点击我的设备--->点击全部参数与信息--->点击MIUI版本或者OS版本7次
+
+<img src="./%E8%AE%A4%E8%AF%86ADB.assets/K40.jpg" alt="K40" style="zoom: 33%;" />
+
+<img src="./%E8%AE%A4%E8%AF%86ADB.assets/K60.jpg" alt="K60" style="zoom: 25%;" />
+
+
+
+## 打开USB调试
+
+在设置中搜索开发者模式或者开发者选项，进入之后找到USB调试，将其打开：
+
+![image-20241006210340775](./%E8%AE%A4%E8%AF%86ADB.assets/image-20241006210340775.png)
+
+
+
+## 打开WIFI调试
+
+在开发者模式中找到无线调试，将其打开，或者使用第三方工具打开，例如wirelessADB工具。
+
+
+
+# 常用的adb命令
+
+> adb
+
+```shell
+adb version									--显示adb版本
+adb start-server							--启动server
+adb kill-server								--停止server
+adb device									--显示连接设备列表
+adb install <name>.apk						--安装APP
+adb install -r <name>.apk					--覆盖安装
+adb uninstall								--卸载APP
+adb push <PC/PATH> <Android/PATH>			--推送文件到手机
+adb pull <Android/PATH> <PC/PATH>			--拉取手机文件到电脑
+adb shell									--进入手机shell控制台
+adb -s <device> shell						--进入指定的设备shell
+adb reboot bootloader						--重启到bootloader模式
+```
+
+
+
+> fastboot
+
+```shell
+fastboot devices					--加载设备
+fastboot getvar product				--查看设备型号
+fastboot reboot						--重启设备
+fastboot flash boot PATH			--刷写boot
+fastboot getvar all					--获取设备所有信息
+fastboot flashing unlock			--解锁bootloader
+fastboot flashing lock				--重新锁定bootloader
+fastboot reboot-bootloader			--重启到bootloader模式
+```
+
+
+
+> logcat
+
+`logcat` 是 `adb` 命令中的一个重要组成部分，它是用于在Android设备上查看实时系统日志的命令。通过 `logcat`，开发者可以监控应用程序的运行情况，查看系统消息、调试信息、警告和错误等。
+
+```shell
+adb logcat								--查看日志
+adb logcat -c							--清除日志
+adb logcat -g							--显示缓冲区的大小
+adb logcat -G 256M						--修改缓冲区的大小
+adb logcat -v time						--设置不同的显示格式
+adb logcat -v color						--带颜色显示
+adb logcat -s <messages>				--g根据tag过滤日志
+```
+
+
+
+# Phone的shell控制台
+
+使用`adb shell`命令就可以进入到手机的shell控制台，并且可以使用Linux shell命令。
+
+![image-20241006211153883](./%E8%AE%A4%E8%AF%86ADB.assets/image-20241006211153883.png)
 
 
 
