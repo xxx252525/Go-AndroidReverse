@@ -159,6 +159,20 @@ sudo pacman -S android-tools
 
 
 
+# Phone的shell控制台
+
+使用`adb shell`命令就可以进入到手机的shell控制台，并且可以使用Linux shell命令。
+
+![image-20241006211153883](./%E8%AE%A4%E8%AF%86ADB.assets/image-20241006211153883.png)
+
+在Android的shell控制台中是可以使用Linux的命令的，因为Android的内核是基于Linux的内核的，里面存放了一些内置的Linux shell基本命令。
+
+![image-20241007140845554](./%E8%AE%A4%E8%AF%86ADB.assets/image-20241007140845554.png)
+
+![image-20241007140911372](./%E8%AE%A4%E8%AF%86ADB.assets/image-20241007140911372.png)
+
+
+
 # 常用的adb命令
 
 > adb
@@ -177,6 +191,16 @@ adb shell									--进入手机shell控制台
 adb -s <device> shell						--进入指定的设备shell
 adb reboot bootloader						--重启到bootloader模式
 ```
+
+查看帮助：
+
+```shell
+adb
+adb help
+adb --help
+```
+
+使用`adb -help`和`adb -h`是错误的。
 
 
 
@@ -211,15 +235,73 @@ adb logcat -s <messages>				--g根据tag过滤日志
 
 
 
-# Phone的shell控制台
+> 常见操作：
 
-使用`adb shell`命令就可以进入到手机的shell控制台，并且可以使用Linux shell命令。
+覆盖安装APP
 
-![image-20241006211153883](./%E8%AE%A4%E8%AF%86ADB.assets/image-20241006211153883.png)
+```shell
+adb install -r xxx.apk
+```
 
+----
 
+当有多个设备连接电脑的时候我们需要连接指定的设备进行操作，否则直接使用`adb shell`会报错，例如：
 
+```shell
+adb -s SERIAL shell
+```
 
+![image-20241007134937401](./%E8%AE%A4%E8%AF%86ADB.assets/image-20241007134937401.png)
+
+`SERIAL`是什么？SERIAL就是设备编码，设备编码如何查看？
+
+![image-20241007134611644](./%E8%AE%A4%E8%AF%86ADB.assets/image-20241007134611644.png)
+
+----
+
+发送文件到手机：
+
+```shell
+adb push D:\apk\MixFile-release-1.5.0.apk /storage/emulated/0 
+```
+
+这里前面是Windows或者Linux、MAC的路径，后面是Android手机的目录路径。
+
+注意：如果要修改文件名字到Android系统，那么只需要在路径后面修改文件名即可
+
+```
+adb push D:\apk\MixFile-release-1.5.0.apk /storage/emulated/0/MixFile-1.5.0.apk
+```
+
+---
+
+拉取手机文件到电脑：
+
+```shell
+adb pull /storage/emulated/0/Download/MixFile-release-1.5.0.apk D:\apk\
+```
+
+如果没有指定PC端的目录，那么就会放在当前目录下。
+
+**注意：手机APP的数据文件和下载的文件都在storage/emulated/0/的目录下面，如果没有Root权限，就无法访问更上级的目录，例如storage/emulated/0。**
+
+![image-20241007140202019](./%E8%AE%A4%E8%AF%86ADB.assets/image-20241007140202019.png)
+
+---
+
+使用超级权限进入Android控制台：
+
+```shell
+adb root
+```
+
+如果需要执行设备，在adb之后添加-s和串口通信的设备码即可。
+
+![image-20241007141442455](./%E8%AE%A4%E8%AF%86ADB.assets/image-20241007141442455.png)
+
+如果显示adbd已经是启动的，并且是root模式，那么当我们使用adb连接设备的时候会直接进入到root用户下，如上图一条命令返回结果，反之就是第二条结果。
+
+![image-20241007141725644](./%E8%AE%A4%E8%AF%86ADB.assets/image-20241007141725644.png)
 
 
 
